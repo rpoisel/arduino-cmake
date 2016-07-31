@@ -23,8 +23,10 @@ add_library(arduino STATIC
 )
 
 target_include_directories(arduino PUBLIC
-    ${ARDUINO_AVR_DIR}/cores/arduino
-    ${ARDUINO_AVR_DIR}/variants/standard
+    $<INSTALL_INTERFACE:h>
+    $<INSTALL_INTERFACE:h/variants/standard>
+    $<BUILD_INTERFACE:${ARDUINO_AVR_DIR}/cores/arduino>
+    $<BUILD_INTERFACE:${ARDUINO_AVR_DIR}/variants/standard>
 )
 
 target_compile_definitions(arduino PUBLIC
@@ -40,6 +42,7 @@ target_link_libraries(arduino PUBLIC
 )
 
 install(TARGETS arduino
+    EXPORT arduino-targets
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
@@ -50,3 +53,13 @@ install(DIRECTORY ${ARDUINO_AVR_DIR}/cores/arduino/
     FILES_MATCHING PATTERN "*.h"
 )
 
+install(DIRECTORY ${ARDUINO_AVR_DIR}/variants/standard/
+    DESTINATION h/variants/standard
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(EXPORT arduino-targets DESTINATION cmake)
+
+configure_file(${CMAKE_CURRENT_LIST_DIR}/cmake/arduino-config-version.cmake.in ${CMAKE_BINARY_DIR}/arduino-config-version.cmake @ONLY)
+install(FILES ${CMAKE_BINARY_DIR}/arduino-config-version.cmake DESTINATION cmake)
+install(DIRECTORY cmake/ DESTINATION cmake FILES_MATCHING PATTERN "*.cmake")

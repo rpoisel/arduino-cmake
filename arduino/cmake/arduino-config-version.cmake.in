@@ -1,0 +1,8 @@
+set(PACKAGE_VERSION @Arduino_VERSION@)
+if("${PACKAGE_FIND_VERSION_MAJOR}" EQUAL 1)
+    set(PACKAGE_VERSION_COMPATIBLE TRUE) # compatible with any version 1.x
+    if("${PACKAGE_FIND_VERSION_MINOR}" EQUAL 6)
+        set(PACKAGE_VERSION_EXACT TRUE)    # exact match for version 1.6
+    endif("${PACKAGE_FIND_VERSION_MINOR}" EQUAL 6)
+endif("${PACKAGE_FIND_VERSION_MAJOR}" EQUAL 1)
+
